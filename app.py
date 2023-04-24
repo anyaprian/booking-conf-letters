@@ -98,3 +98,9 @@ if user_input and button :
         continue
     tokens = user_input.split()
     st.write(bio_to_dict(tokens, tags))
+        del (
+            model,
+            tokenizer,
+            outputs,
+            logits
+        )
