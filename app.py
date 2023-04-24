@@ -69,13 +69,13 @@ def bio_to_dict(tokens, tags):
     return output
 
 if user_input and button :    
-#     inputs = tokenizer(user_input.split(),
-#                         is_split_into_words=True, 
-#                         return_offsets_mapping=True, 
-#                         padding='max_length', 
-#                         truncation=True, 
-#                         max_length=512,
-#                         return_tensors="pt")
+    inputs = tokenizer(user_input.split(),
+                        is_split_into_words=True, 
+                        return_offsets_mapping=True, 
+                        padding='max_length', 
+                        truncation=True, 
+                        max_length=512,
+                        return_tensors="pt")
 
 #     ids = inputs["input_ids"]
 #     mask = inputs["attention_mask"]
