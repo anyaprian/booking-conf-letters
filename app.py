@@ -1,6 +1,6 @@
 import streamlit as st
 from transformers import BertTokenizerFast, BertForTokenClassification
-import numpy as np
+import torch
 
 @st.cache_data()
 def get_model():
@@ -76,19 +76,15 @@ if user_input and button :
                         truncation=True, 
                         max_length=512,
                         return_tensors="pt")
-
-    move to gpu
-    ids = inputs["input_ids"]
-    mask = inputs["attention_mask"]
-    # forward pass
-    outputs = model(ids, attention_mask=mask)
+    with torch.no_grad():
+        outputs = model(inputs["input_ids"], attention_mask=inputs["attention_mask"])
     logits = outputs[0]
 
-    active_logits = logits.reshape(-1, model.num_labels) 
-    flattened_predictions = np.argmax(active_logits.detach().numpy(), axis=1)
+    active_logits = logits.view(-1, model.num_labels)
+    flattened_predictions = torch.argmax(active_logits, axis=1)
 
     tokens = tokenizer.convert_ids_to_tokens(ids.squeeze().tolist())
-    token_predictions = [ids_to_labels[i] for i in flattened_predictions.cpu().numpy()]
+    token_predictions = [ids_to_labels[i] for i in flattened_predictions.numpy()]
     wp_preds = list(zip(tokens, token_predictions)) # list of tuples. Each tuple = (wordpiece, prediction)
 
     tags = []
@@ -98,10 +94,10 @@ if user_input and button :
       else:
         continue
     tokens = user_input.split()
-    st.write(user_input)
+    st.write(bio_to_dict(tokens, tags))
     del (
             model,
             tokenizer,
-            outputs,
-            logits
+            logits,
+            outputs
         )
