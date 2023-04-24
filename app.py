@@ -14,29 +14,29 @@ tokenizer, model = get_model()
 user_input = st.text_area('Text')
 button = st.button("Find Entities")
 
-ids_to_labels = {
-     0: 'O',
-     1: 'B-PROPERTY_PHONE',
-     2: 'I-PROPERTY_PHONE',
-     3: 'B-HOTEL_NAME',
-     4: 'I-HOTEL_NAME',
-     5: 'B-PIN_CODE',
-     6: 'B-RESERVATION_NUMBER',
-     7: 'B-CHECK_IN_DATE_TIME',
-     8: 'I-CHECK_IN_DATE_TIME',
-     9: 'B-CHECK_OUT_DATE_TIME',
-     10: 'I-CHECK_OUT_DATE_TIME',
-     11: 'B-LOCATION',
-     12: 'I-LOCATION',
-     13: 'B-MAX_CAPACITY',
-     14: 'I-MAX_CAPACITY',
-     15: 'B-GUEST_NAME',
-     16: 'I-GUEST_NAME',
-     17: 'B-TOTAL_PRICE',
-     18: 'I-TOTAL_PRICE',
-     19: 'B-NUMBER_OF_GUESTS',
-     20: 'I-NUMBER_OF_GUESTS'
-}
+ids_to_labels = {0: 'O',
+ 1: 'B-HOTEL_NAME',
+ 2: 'I-HOTEL_NAME',
+ 3: 'B-PROPERTY_PHONE',
+ 4: 'I-PROPERTY_PHONE',
+ 5: 'B-PIN_CODE',
+ 6: 'B-RESERVATION_NUMBER',
+ 7: 'B-CHECK_IN_DATE_TIME',
+ 8: 'I-CHECK_IN_DATE_TIME',
+ 9: 'B-CHECK_OUT_DATE_TIME',
+ 10: 'I-CHECK_OUT_DATE_TIME',
+ 11: 'B-LOCATION',
+ 12: 'I-LOCATION',
+ 13: 'B-MAX_CAPACITY',
+ 14: 'I-MAX_CAPACITY',
+ 15: 'B-GUEST_NAME',
+ 16: 'I-GUEST_NAME',
+ 17: 'B-TOTAL_PRICE',
+ 18: 'I-TOTAL_PRICE',
+ 19: 'B-NUMBER_OF_GUESTS',
+ 20: 'I-NUMBER_OF_GUESTS',
+ 21: 'B-CANCELLATION_FEE',
+ 22: 'I-CANCELLATION_FEE'}
 
 def bio_to_dict(tokens, tags):
     """Convert BIO tagged text to a dictionary of entities and their spans"""
@@ -77,7 +77,6 @@ if user_input and button :
                         max_length=512,
                         return_tensors="pt")
 
-    # move to gpu
     ids = inputs["input_ids"]
     mask = inputs["attention_mask"]
     # forward pass
@@ -88,7 +87,7 @@ if user_input and button :
     flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size*seq_len,) - predictions at the token level
 
     tokens = tokenizer.convert_ids_to_tokens(ids.squeeze().tolist())
-    token_predictions = [ids_to_labels[i] for i in flattened_predictions.cpu().numpy()]
+    token_predictions = [ids_to_labels[i] for i in flattened_predictions.numpy()]
     wp_preds = list(zip(tokens, token_predictions)) # list of tuples. Each tuple = (wordpiece, prediction)
 
     tags = []
