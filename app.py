@@ -69,38 +69,38 @@ def bio_to_dict(tokens, tags):
     return output
 
 if user_input and button :    
-    inputs = tokenizer(user_input.split(),
-                        is_split_into_words=True, 
-                        return_offsets_mapping=True, 
-                        padding='max_length', 
-                        truncation=True, 
-                        max_length=512,
-                        return_tensors="pt")
+#     inputs = tokenizer(user_input.split(),
+#                         is_split_into_words=True, 
+#                         return_offsets_mapping=True, 
+#                         padding='max_length', 
+#                         truncation=True, 
+#                         max_length=512,
+#                         return_tensors="pt")
 
-    ids = inputs["input_ids"]
-    mask = inputs["attention_mask"]
-    # forward pass
-    outputs = model(ids, attention_mask=mask)
-    logits = outputs[0]
+#     ids = inputs["input_ids"]
+#     mask = inputs["attention_mask"]
+#     # forward pass
+#     outputs = model(ids, attention_mask=mask)
+#     logits = outputs[0]
 
-    active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
-    flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size*seq_len,) - predictions at the token level
+#     active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
+#     flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size*seq_len,) - predictions at the token level
 
-    tokens = tokenizer.convert_ids_to_tokens(ids.squeeze().tolist())
-    token_predictions = [ids_to_labels[i] for i in flattened_predictions.numpy()]
-    wp_preds = list(zip(tokens, token_predictions)) # list of tuples. Each tuple = (wordpiece, prediction)
+#     tokens = tokenizer.convert_ids_to_tokens(ids.squeeze().tolist())
+#     token_predictions = [ids_to_labels[i] for i in flattened_predictions.numpy()]
+#     wp_preds = list(zip(tokens, token_predictions)) # list of tuples. Each tuple = (wordpiece, prediction)
 
-    tags = []
-    for token_pred, mapping in zip(wp_preds, inputs["offset_mapping"].squeeze().tolist()):
-      if mapping[0] == 0 and mapping[1] != 0:
-        tags.append(token_pred[1])
-      else:
-        continue
-    tokens = user_input.split()
-    st.write(bio_to_dict(tokens, tags))
-        del (
-            model,
-            tokenizer,
-            outputs,
-            logits
-        )
+#     tags = []
+#     for token_pred, mapping in zip(wp_preds, inputs["offset_mapping"].squeeze().tolist()):
+#       if mapping[0] == 0 and mapping[1] != 0:
+#         tags.append(token_pred[1])
+#       else:
+#         continue
+#     tokens = user_input.split()
+    st.write(user_input)
+    del (
+        model,
+        tokenizer
+#         outputs,
+#         logits
+    )
