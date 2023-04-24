@@ -2,7 +2,6 @@ import streamlit as st
 from transformers import BertTokenizerFast, BertForTokenClassification
 import torch
 
-@st.cache_data()
 def get_model():
     tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
     model = BertForTokenClassification.from_pretrained("Anna567/booking-conf-letters")
@@ -74,7 +73,7 @@ if user_input and button :
                         return_offsets_mapping=True, 
                         padding='max_length', 
                         truncation=True, 
-                        max_length=512,
+                        max_length=256,
                         return_tensors="pt")
     with torch.no_grad():
         outputs = model(inputs["input_ids"], attention_mask=inputs["attention_mask"])
@@ -83,7 +82,7 @@ if user_input and button :
     active_logits = logits.view(-1, model.num_labels)
     flattened_predictions = torch.argmax(active_logits, axis=1)
 
-    tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"].squeeze().tolist())
+    tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"].squeeze())
     token_predictions = [ids_to_labels[i] for i in flattened_predictions.numpy()]
     wp_preds = list(zip(tokens, token_predictions)) # list of tuples. Each tuple = (wordpiece, prediction)
 
