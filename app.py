@@ -83,8 +83,8 @@ if user_input and button :
     outputs = model(ids, attention_mask=mask)
     logits = outputs[0]
 
-    active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
-    flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size*seq_len,) - predictions at the token level
+#     active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
+#     flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size*seq_len,) - predictions at the token level
 
 #     tokens = tokenizer.convert_ids_to_tokens(ids.squeeze().tolist())
 #     token_predictions = [ids_to_labels[i] for i in flattened_predictions.numpy()]
