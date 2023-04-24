@@ -1,5 +1,4 @@
 import streamlit as st
-import numpy as np
 from transformers import BertTokenizerFast, BertForTokenClassification
 import torch
 
