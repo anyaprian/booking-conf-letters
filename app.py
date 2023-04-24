@@ -83,7 +83,7 @@ if user_input and button :
     active_logits = logits.view(-1, model.num_labels)
     flattened_predictions = torch.argmax(active_logits, axis=1)
 
-    tokens = tokenizer.convert_ids_to_tokens(ids.squeeze().tolist())
+    tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"].squeeze().tolist())
     token_predictions = [ids_to_labels[i] for i in flattened_predictions.numpy()]
     wp_preds = list(zip(tokens, token_predictions)) # list of tuples. Each tuple = (wordpiece, prediction)
 
