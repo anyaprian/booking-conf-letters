@@ -1,10 +1,10 @@
 import streamlit as st
-from transformers import BertTokenizerFast, BertForTokenClassification
+from transformers import BertTokenizerFast, DistilBertForTokenClassification
 import torch
 
 def get_model():
     tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
-    model = BertForTokenClassification.from_pretrained("Anna567/booking-conf-letters")
+    model = DistilBertForTokenClassification.from_pretrained("Anna567/booking-conf-letters")
     return tokenizer,model
 
 
