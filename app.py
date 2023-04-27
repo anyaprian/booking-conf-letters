@@ -69,8 +69,7 @@ def bio_to_dict(tokens, tags):
     output = {}
     for entity, span in entities.items():
         start, end = span
-        output[entity] = " ".join(tokens[start:end+1])
-    
+        output[entity] = " ".join(tokens[start:end+1]).strip('.').strip('!')
     return output
 
 if user_input and button :    
